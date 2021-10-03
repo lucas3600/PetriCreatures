@@ -1,4 +1,4 @@
-package com.lucas.PetriCreatures.World;
+package com.lucas.PetriCreatures.Utils;
 
 public class Coords {
 	private float x;
@@ -7,6 +7,9 @@ public class Coords {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+	public Coords sum(Coords c) {
+		return new Coords(x+c.getX(),y+c.getY());
 	}
 	public float getX() {
 		return x;
@@ -19,6 +22,10 @@ public class Coords {
 	}
 	public void setY(float y) {
 		this.y = y;
+	}
+	@Override
+	public String toString() {
+		return x+";"+y;
 	}
 	
 	
