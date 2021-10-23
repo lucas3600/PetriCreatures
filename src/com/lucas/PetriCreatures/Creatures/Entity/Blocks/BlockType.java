@@ -1,13 +1,15 @@
 package com.lucas.PetriCreatures.Creatures.Entity.Blocks;
 
 public enum BlockType {
-	Bone(),
-	Tissue(),
-	Fat(),
-	Spike(),
-	Mouth(),
-	Thruster(),
+	// *** // Value
+	Bone(), // 	0
+	Tissue(),//	1
+	Fat(),//   	2
+	Spike(),// 	3
+	Mouth(),// 	4
+	Thruster(),//5
 	Center(),
-	Eye(),
-	Contact();
+	Eye(),//   	6
+	Contact();//7
+
 }

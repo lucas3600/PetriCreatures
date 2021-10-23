@@ -22,7 +22,14 @@ public class Vector {
 	public float getNorm() {
 		return norm;
 	}
-
+	/**
+	 * Multiplie le vecteur par un réel
+	 * @param r Un réel
+	 * @return Le vecteur multiplié par le réel r
+	 */
+	public Vector mult(float r) {
+		return new Vector(getX()*r,getY()*r);
+	}
 	public float scal(Vector v) {
 		return v.getX() * x + v.getY() * y;
 	}

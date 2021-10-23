@@ -18,6 +18,8 @@ public abstract class ABlock implements IBlock{
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
 	
+	public static final float blockLengthSide =5;
+	
 	public ABlock(String id,ABlock[] neighbors, Creature owner, Coords relativeCoords,int direction) {
 		this.neighbors = neighbors;
 		this.owner = owner;

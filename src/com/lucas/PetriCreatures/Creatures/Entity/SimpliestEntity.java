@@ -16,7 +16,6 @@ public abstract class SimpliestEntity extends Entity{
 
 		Coords c = PetriBox.CoordsToChunkCoords(this.getAbsoluteCoords());
 		Chunk chunk = box.getChunk((int)(c.getX()), (int)(c.getY()));
-		System.out.println("Check  "+c);
 		chunk.add(this);
 	}
 	

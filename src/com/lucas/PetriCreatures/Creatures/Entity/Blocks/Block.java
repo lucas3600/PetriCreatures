@@ -14,7 +14,7 @@ public class Block extends ABlock {
 	private float lifeContribution;
 	
 	public Block(String id,BlockType type, int direction) {
-		super(id,null,null,null,direction);
+		super(id,new ABlock[4],null,null,direction);
 		this.type = type;
 		if (type == BlockType.Bone) {
 			harshness = 20;

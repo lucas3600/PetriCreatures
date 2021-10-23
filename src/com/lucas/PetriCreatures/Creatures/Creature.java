@@ -11,6 +11,8 @@ import com.lucas.PetriCreatures.Utils.Coords;
 import com.lucas.PetriCreatures.Utils.Force;
 import com.lucas.PetriCreatures.Utils.MassPoint;
 import com.lucas.PetriCreatures.Utils.Vector;
+import com.lucas.PetriCreatures.World.Chunk;
+import com.lucas.PetriCreatures.World.PetriBox;
 
 public class Creature extends Entity {
 	private Brain brain;
@@ -19,7 +21,9 @@ public class Creature extends Entity {
 	private float hunger;
 
 	private float weight;
-	private float speed;
+	
+	private Vector speed;
+	private float rotation;
 
 	private Block[] blocks;
 	private String genome;
@@ -76,26 +80,29 @@ public class Creature extends Entity {
 		Vector resulting = null;
 		float torque = 0;
 		MassPoint centerOfMass = getCenterOfMass();
-		float momentInertia = 0;
+		float momentInertia = getMomentOfInertia(centerOfMass);
 		for (Force force : forces) {
 			resulting = force.sum(resulting);
 			Vector distance = new Vector(force.getApplicationPoint(), centerOfMass);
 			torque += distance.crossProduct(force);
 		}
-
+		
 		acceleration = new Force(centerOfMass, resulting.getX() / centerOfMass.getWeight(),
 				resulting.getY() / centerOfMass.getWeight());
-		this.radialAcceleration = torque;
+		
+		this.radialAcceleration = torque/momentInertia;
+		speed = speed.sum(acceleration.mult(PetriBox.timeConstant));
+		rotation += radialAcceleration*PetriBox.timeConstant;
 		computed = true;
 	}
 
-	public float getMomentum() {
+	public float getRadialAcceleration() {
 		if (!computed)
 			compute();
 		return radialAcceleration;
 	}
 
-	public Vector getTranslation() {
+	public Vector getAcceleration() {
 		if (!computed)
 			compute();
 		return acceleration;
@@ -115,7 +122,7 @@ public class Creature extends Entity {
 		return new MassPoint(x, y, weight);
 	}
 
-	private float getMomentOfInteria(Coords gravityCenter) {
+	private float getMomentOfInertia(Coords gravityCenter) {
 		float inertia = 0;
 		for (MassPoint point : points) {
 			inertia += (new Vector(point, gravityCenter).getNorm()) * point.getWeight();
@@ -175,12 +182,19 @@ public class Creature extends Entity {
 		return weight;
 	}
 
-	public float getSpeed() {
+	public Vector getSpeed() {
 		return speed;
 	}
 
-	public void setSpeed(float speed) {
+	public void setSpeed(Vector speed) {
 		this.speed = speed;
+	}
+
+	@Override
+	public void resolvingContainment(PetriBox box) {
+		Coords c = PetriBox.CoordsToChunkCoords(this.getAbsoluteCoords());
+		Chunk chunk = box.getChunk((int)(c.getX()), (int)(c.getY()));
+		chunk.add(this);
 	}
 
 }
