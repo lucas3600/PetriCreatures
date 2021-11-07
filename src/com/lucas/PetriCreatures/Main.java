@@ -16,14 +16,16 @@ public class Main {
 		PetriBoxViewer petriViewer = new PetriBoxViewer(petriBox);
 
 		for (int i = 0; i < 10; i++) {
-			petriBox.addEntity(new Food(new Coords((float) (Math.random() * 100), (float) (Math.random() * 100)),
+			petriBox.addEntity(new Food(new Coords((float)(i*25), (float) (i*25)),
 					(int) (Math.random() * 10)));
 		}
-		int counter = 0;
+		
+		
+		int counter = 0;	
 		int globalCounter = 0;
 		Creature creature = CreatureFactory
 				.interpretGenome("AFFFFFAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
-		petriBox.addEntity(creature, new Coords((float) (Math.random() * 5 * 50), (float) (Math.random() * 5 * 50)));
+		petriBox.addEntity(creature, new Coords((float) (125), (float) (125)));
 		/*
 		 * Creature creature = CreatureFactory.interpretGenome(
 		 * "AFFFFFAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
@@ -39,9 +41,11 @@ public class Main {
 		 * 
 		 * if(counter > 1) break; globalCounter++; }
 		 */
-		System.out.println(globalCounter);
+		//System.out.println(globalCounter);
+		
 		ViewerOf frame = new ViewerOf(petriViewer);
 		frame.addKeyListener(petriViewer);
+		frame.addMouseWheelListener(petriViewer);
 
 	}
 

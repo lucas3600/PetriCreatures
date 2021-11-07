@@ -1,5 +1,8 @@
 package com.lucas.PetriCreatures.Creatures;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import com.lucas.PetriCreatures.Creatures.Brain.Brain;
@@ -13,6 +16,7 @@ import com.lucas.PetriCreatures.Utils.MassPoint;
 import com.lucas.PetriCreatures.Utils.Vector;
 import com.lucas.PetriCreatures.World.Chunk;
 import com.lucas.PetriCreatures.World.PetriBox;
+import com.lucas.PetriCreatures.World.PetriBoxViewer;
 
 public class Creature extends Entity {
 	private Brain brain;
@@ -21,7 +25,7 @@ public class Creature extends Entity {
 	private float hunger;
 
 	private float weight;
-	
+
 	private Vector speed;
 	private float rotation;
 
@@ -58,13 +62,35 @@ public class Creature extends Entity {
 		this.blocks = blocks;
 		this.genome = genome;
 	}
+
 	@Override
 	public void tick() {
 		for (Block block : blocks) {
 			block.activate();
 		}
-		
+
 	}
+
+	@Override
+	public void draw(Graphics2D g2d) {
+		rotation += 0.01;
+		g2d.rotate(rotation, getAbsoluteCoords().getX(),
+				getAbsoluteCoords().getY());
+		for (ABlock block : blocks) {
+
+			if (Block.class.isAssignableFrom(block.getClass())) {
+				Block cBlock = (Block) block;
+				Coords c = cBlock.getRelativeCoords().sum(this.getAbsoluteCoords());
+				Image image = PetriBoxViewer.images.get(cBlock.getType().name());
+
+				g2d.drawImage(image, (int) ( (c.getX())),
+						(int) ( (c.getY())),
+						(int) (Block.blockLengthSide), (int) (Block.blockLengthSide), null);
+			}
+		}
+		g2d.rotate(-rotation, getAbsoluteCoords().getX(),
+				getAbsoluteCoords().getY());
+		}
 
 	public void addForce(Force force) {
 		forces.add(force);
@@ -86,13 +112,13 @@ public class Creature extends Entity {
 			Vector distance = new Vector(force.getApplicationPoint(), centerOfMass);
 			torque += distance.crossProduct(force);
 		}
-		
+
 		acceleration = new Force(centerOfMass, resulting.getX() / centerOfMass.getWeight(),
 				resulting.getY() / centerOfMass.getWeight());
-		
-		this.radialAcceleration = torque/momentInertia;
+
+		this.radialAcceleration = torque / momentInertia;
 		speed = speed.sum(acceleration.mult(PetriBox.timeConstant));
-		rotation += radialAcceleration*PetriBox.timeConstant;
+		rotation += radialAcceleration * PetriBox.timeConstant;
 		computed = true;
 	}
 
@@ -193,7 +219,7 @@ public class Creature extends Entity {
 	@Override
 	public void resolvingContainment(PetriBox box) {
 		Coords c = PetriBox.CoordsToChunkCoords(this.getAbsoluteCoords());
-		Chunk chunk = box.getChunk((int)(c.getX()), (int)(c.getY()));
+		Chunk chunk = box.getChunk((int) (c.getX()), (int) (c.getY()));
 		chunk.add(this);
 	}
 

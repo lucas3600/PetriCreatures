@@ -33,8 +33,8 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 	private float zoom;
 	private Coords viewCenter;
 	private PetriBox petriBox;
-	private static HashMap<String, Image> images;
-
+	public static HashMap<String, Image> images;
+	private double stupidBuffer = 0;
 	public PetriBoxViewer(PetriBox petriBox) {
 		this.petriBox = petriBox;
 		zoom = 1;
@@ -66,11 +66,12 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 
 	@Override
 	public void paintComponent(Graphics g) {
-		Graphics2D g2d = (Graphics2D)g;
-		g.clearRect(0, 0, getWidth(), getHeight());
+		stupidBuffer+=0.1;
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.clearRect(0, 0, getWidth(), getHeight());
 		// Donc on affiche tout les chunks contenus dans un cercle dont on calcule
 		// d'abord le diamètre à partir de la largeur de la boite
-		float radius = petriBox.getWidth() / (zoom);
+		float radius = petriBox.getWidth() / ( zoom);
 		// Ici on triche pour simplifier les calculs on affiche un carré de coté radius
 		/**
 		 * En fait un chunk peut être un rectangle donc on calcule les demi cotés pour
@@ -79,7 +80,14 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 		int radiusXChunk = (int) (radius / Chunk.width) + 1;
 		int radiusYChunk = (int) (radius / Chunk.height) + 1;
 		Coords chunkCoords = PetriBox.CoordsToChunkCoords(viewCenter);
-		// System.out.println(radiusXChunk);
+		// Ici il faut déterminer quelle partie du graphics va être utilisé pour le
+		// dessin et qu'il faut nettoyer
+		g2d.translate(-viewCenter.getX(), -viewCenter.getY());
+		g.setColor(Color.black);
+		g2d.translate((getWidth()/2), (getHeight()/2));
+		g2d.scale(zoom, zoom);
+		
+	
 		for (int x = -radiusXChunk; x <= radiusXChunk; x++) {
 			for (int y = -radiusYChunk; y <= radiusYChunk; y++) {
 
@@ -88,44 +96,11 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 					continue;
 				ArrayList<Entity> entities = chunk.getEntities();
 				for (Entity entity : entities) {
-
-					if (Food.class.isAssignableFrom(entity.getClass())) {
-						Food food = (Food) (entity);
-						Coords c = food.getAbsoluteCoords();
-						g.setColor(Color.RED);
-						float foodRadius = 2 * food.getAmount();
-						// System.out.println((int)(this.getWidth()/2.0+(-foodRadius+c.getX()-viewCenter.getX())*zoom)+"
-						// "
-						// +(int)(this.getHeight()/2.0+(-foodRadius+c.getY()-viewCenter.getY())*zoom));
-						g2d.fillOval((int) (this.getWidth() / 2.0 + (-foodRadius + c.getX() - viewCenter.getX()) * zoom),
-								(int) (this.getHeight() / 2.0 + (-foodRadius + c.getY() - viewCenter.getY()) * zoom),
-								(int) ((2 * foodRadius) * zoom), (int) ((2 * foodRadius) * zoom));
-					} else if (Creature.class.isAssignableFrom(entity.getClass())) {
-						Creature creature = (Creature) entity;
-						AffineTransform op = AffineTransform.getRotateInstance(Math.toRadians(45), anchorx, anchory)
-						g2d.rotate(0.34);
-						
-						
-						for (ABlock block : creature.getBlocks()) {
-
-							if (Block.class.isAssignableFrom(block.getClass())) {
-								Block cBlock = (Block) block;
-								Coords c = cBlock.getRelativeCoords().sum(creature.getAbsoluteCoords());
-								Image image = images.get(cBlock.getType().name());
-								
-								
-								g2d.drawImage(image,
-										(int) ((this.getWidth() / 2.0) + (c.getX() - viewCenter.getX()) * zoom),
-										(int) ((this.getHeight() / 2.0) + (c.getY() - viewCenter.getY()) * zoom),
-										(int) (Block.blockLengthSide * zoom), (int) (Block.blockLengthSide * zoom),
-										null);
-							}
-						}
-						g2d.rotate(0);
-					}
+					entity.draw(g2d);
 				}
 			}
 		}
+
 	}
 
 	private static Image loadImage(String path) {
@@ -170,7 +145,6 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-
+		zoom += e.getPreciseWheelRotation();
 	}
 }
