@@ -13,4 +13,5 @@ public interface IBlock {
 	public void activate();
 	public void setInput(float input);
 	public float getOutput();
+	public boolean checkCollision(Entity e);
 }

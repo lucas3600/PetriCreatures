@@ -1,4 +1,4 @@
-package com.lucas.PetriCreatures.World;
+package com.lucas.PetriCreatures.HMI;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,6 +27,8 @@ import com.lucas.PetriCreatures.Creatures.Entity.Food;
 import com.lucas.PetriCreatures.Creatures.Entity.Blocks.ABlock;
 import com.lucas.PetriCreatures.Creatures.Entity.Blocks.Block;
 import com.lucas.PetriCreatures.Utils.Coords;
+import com.lucas.PetriCreatures.World.Chunk;
+import com.lucas.PetriCreatures.World.PetriBox;
 import com.lucas.PetriCreatures.Creatures.Entity.Blocks.BlockType;
 
 public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyListener {
@@ -34,7 +36,7 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 	private Coords viewCenter;
 	private PetriBox petriBox;
 	public static HashMap<String, Image> images;
-	private double stupidBuffer = 0;
+
 	public PetriBoxViewer(PetriBox petriBox) {
 		this.petriBox = petriBox;
 		zoom = 1;
@@ -66,12 +68,11 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 
 	@Override
 	public void paintComponent(Graphics g) {
-		stupidBuffer+=0.1;
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.clearRect(0, 0, getWidth(), getHeight());
 		// Donc on affiche tout les chunks contenus dans un cercle dont on calcule
 		// d'abord le diamètre à partir de la largeur de la boite
-		float radius = petriBox.getWidth() / ( zoom);
+		float radius = petriBox.getWidth() / (zoom);
 		// Ici on triche pour simplifier les calculs on affiche un carré de coté radius
 		/**
 		 * En fait un chunk peut être un rectangle donc on calcule les demi cotés pour
@@ -82,12 +83,13 @@ public class PetriBoxViewer extends JPanel implements MouseWheelListener, KeyLis
 		Coords chunkCoords = PetriBox.CoordsToChunkCoords(viewCenter);
 		// Ici il faut déterminer quelle partie du graphics va être utilisé pour le
 		// dessin et qu'il faut nettoyer
-		g2d.translate(-viewCenter.getX(), -viewCenter.getY());
-		g.setColor(Color.black);
-		g2d.translate((getWidth()/2), (getHeight()/2));
+
+		g2d.translate((getWidth() / 2), (getHeight() / 2));
 		g2d.scale(zoom, zoom);
+		g2d.translate(-viewCenter.getX(), -viewCenter.getY());
 		
-	
+		petriBox.tickTheBox();
+		
 		for (int x = -radiusXChunk; x <= radiusXChunk; x++) {
 			for (int y = -radiusYChunk; y <= radiusYChunk; y++) {
 

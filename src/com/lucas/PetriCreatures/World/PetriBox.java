@@ -30,6 +30,28 @@ public class PetriBox {
 		}
 	}
 	/**
+	 * Lance un tick à toutes les entités de la boite 
+	 */
+	public void tickTheBox() {
+		//Tout d'abord on active toutes les entitées de la boite
+		for(int x = 0;x < widthC;x ++) {
+			for(int y = 0;y < heightC;y++) {
+				chunks[x][y].getEntities().forEach(e->e.tick());
+			}
+		}
+		//Et ensuite on leur dit de vérifier leurs collisions avec les autres entitées présentes dans la boite
+		for(int x = 0;x < widthC;x ++) {
+			for(int y = 0;y < heightC;y++) {
+				for(Entity e : chunks[x][y].getEntities()) {
+					for(Entity e2 : chunks[x][y].getEntities()) {
+						if(e != e2)
+							e.checkCollision(e2);
+					}
+				}
+			}
+		}
+	}
+	/**
 	 * Ajoute une entité aux coordonnées en paramètres 
 	 * @param entity L'enitté 
 	 * @param c les coordonnées où sera ajouter l'entité. Modifies les coordonnées assignés à l'enitté

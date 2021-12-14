@@ -20,7 +20,7 @@ public class ViewerOf extends JFrame{
 			while(true) {
 				pan.repaint();
 				try {
-					Thread.sleep(10);
+					Thread.sleep(900);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

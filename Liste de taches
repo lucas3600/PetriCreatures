@@ -1,3 +1,10 @@
--Rotation images
--Viewer
--Réécrir le système de dessin
+-Rotation images				CHECK
+-Viewer							CHECK
+-Réécrir le système de dessin 	CHECK
+
+-Frottement 					CHECK
+-Affichage de l'orientation des blocs	CHECK
+-Soucis entre les différents systèmes de coordonnées : trigonométrique != écran CHECK
+
+-Collision 						CHECK
+-Optimisation collision

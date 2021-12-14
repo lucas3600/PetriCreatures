@@ -4,7 +4,7 @@ import com.lucas.PetriCreatures.Creatures.Creature;
 import com.lucas.PetriCreatures.Creatures.Entity.Entity;
 import com.lucas.PetriCreatures.Utils.Coords;
 
-public abstract class ABlock implements IBlock{
+public abstract class ABlock implements IBlock {
 	private ABlock[] neighbors;
 	private String id;
 	private Creature owner;
@@ -12,15 +12,15 @@ public abstract class ABlock implements IBlock{
 	private int direction;
 	protected float input;
 	protected float output;
-	
+
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
-	
-	public static final float blockLengthSide =5;
-	
-	public ABlock(String id,ABlock[] neighbors, Creature owner, Coords relativeCoords,int direction) {
+
+	public static final float blockLengthSide = 5;
+
+	public ABlock(String id, ABlock[] neighbors, Creature owner, Coords relativeCoords, int direction) {
 		this.neighbors = neighbors;
 		this.owner = owner;
 		this.id = id;
@@ -34,6 +34,12 @@ public abstract class ABlock implements IBlock{
 
 	public Creature getOwner() {
 		return owner;
+	}
+
+	public Coords getAbsoluteCoords() {
+		return this.getOwner().getAbsoluteCoords()
+				.sum(new Coords((float) Math.cos(this.getOwner().getOrientation()) * relativeCoords.getX(),
+								(float) Math.sin(this.getOwner().getOrientation()) * relativeCoords.getY()));
 	}
 
 	public Coords getRelativeCoords() {
@@ -62,7 +68,7 @@ public abstract class ABlock implements IBlock{
 
 	@Override
 	public void setInput(float input) {
-	this.input = input;
+		this.input = input;
 	}
 
 	@Override

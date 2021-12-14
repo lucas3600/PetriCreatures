@@ -24,8 +24,8 @@ public class Food extends SimpliestEntity {
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
-
+		if(amount < 0)
+			this.setDead(true);
 	}
 
 	@Override

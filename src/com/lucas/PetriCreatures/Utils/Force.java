@@ -11,6 +11,10 @@ public class Force extends Vector{
 		super(nX,nY);
 		applicationPoint = new Coords(aX,aY);
 	}
+	public Force(Coords applicationPoint,Vector v) {
+		super(v.getX(),v.getY());
+		this.applicationPoint = applicationPoint;
+	}
 	public Coords getApplicationPoint() {
 		return applicationPoint;
 	}

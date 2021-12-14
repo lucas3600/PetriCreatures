@@ -5,33 +5,31 @@ import com.lucas.PetriCreatures.Creatures.CreatureFactory;
 import com.lucas.PetriCreatures.Creatures.Entity.Food;
 import com.lucas.PetriCreatures.Creatures.Entity.Blocks.ABlock;
 import com.lucas.PetriCreatures.Creatures.Entity.Blocks.Block;
+import com.lucas.PetriCreatures.HMI.Frame;
+import com.lucas.PetriCreatures.HMI.PetriBoxViewer;
 import com.lucas.PetriCreatures.Utils.Coords;
+import com.lucas.PetriCreatures.Utils.Force;
 import com.lucas.PetriCreatures.World.PetriBox;
-import com.lucas.PetriCreatures.World.PetriBoxViewer;
 
 public class Main {
 
 	public static void main(String[] args) {
 		PetriBox petriBox = new PetriBox(5, 5);
-		PetriBoxViewer petriViewer = new PetriBoxViewer(petriBox);
-
-		for (int i = 0; i < 10; i++) {
-			petriBox.addEntity(new Food(new Coords((float)(i*25), (float) (i*25)),
-					(int) (Math.random() * 10)));
-		}
-		
-		
-		int counter = 0;	
-		int globalCounter = 0;
 		Creature creature = CreatureFactory
-				.interpretGenome("AFFFFFAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
-		petriBox.addEntity(creature, new Coords((float) (125), (float) (125)));
+				.interpretGenome("AFFFFFAAAAAAAABACAAAAAAAADFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
+		//creature.setOrientation((float) (Math.PI*1/2));
+		/*petriBox.addEntity(creature,
+				new Coords((float) (Math.random() * 5 * 50), (float) (Math.random() * 5 * 50)));*/
+		petriBox.addEntity(creature,new Coords(10,10));
+		petriBox.addEntity(new Food(null,10),new Coords(10,10));
 		/*
-		 * Creature creature = CreatureFactory.interpretGenome(
-		 * "AFFFFFAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
-		 * petriBox.addEntity(creature,new
-		 * Coords((float)(Math.random()*5*50),(float)(Math.random()*5*50)));
-		 */
+		for (int i = 0; i < 1; i++) {
+			Creature creature = CreatureFactory
+					.interpretGenome("AFFFFFAAAAAAAABBCAAAAAAAABFFFFAAAAAAAAAAACAAAAFFFFAAAAAAAAAAACAAAAFFFFA");
+			petriBox.addEntity(creature,
+					new Coords((float) (Math.random() * 5 * 50), (float) (Math.random() * 5 * 50)));
+		}*/
+
 		/*
 		 * while(true) { Creature creature =
 		 * CreatureFactory.interpretGenome(generateRandomGenome());
@@ -41,11 +39,10 @@ public class Main {
 		 * 
 		 * if(counter > 1) break; globalCounter++; }
 		 */
-		//System.out.println(globalCounter);
+		// System.out.println(globalCounter);
+
+		Frame frame = new Frame(petriBox);
 		
-		ViewerOf frame = new ViewerOf(petriViewer);
-		frame.addKeyListener(petriViewer);
-		frame.addMouseWheelListener(petriViewer);
 
 	}
 

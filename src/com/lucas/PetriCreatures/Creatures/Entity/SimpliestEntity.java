@@ -18,5 +18,11 @@ public abstract class SimpliestEntity extends Entity{
 		Chunk chunk = box.getChunk((int)(c.getX()), (int)(c.getY()));
 		chunk.add(this);
 	}
+
+	@Override
+	public void checkCollision(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

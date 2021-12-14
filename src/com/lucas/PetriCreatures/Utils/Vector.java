@@ -4,10 +4,11 @@ public class Vector {
 	private float x;
 	private float y;
 	private float norm;
-
+	private boolean isNormCal;
 	public Vector(float x, float y) {
 		this.x = x;
 		this.y = y;
+		isNormCal = false;
 	}
 
 	public Vector(Coords A, Coords B) {
@@ -17,9 +18,12 @@ public class Vector {
 
 	private void computeNorm() {
 		norm = (float) Math.sqrt(x * x + y * y);
+		isNormCal = true;
 	}
 
 	public float getNorm() {
+		if(!isNormCal)
+			computeNorm();
 		return norm;
 	}
 	/**
@@ -54,11 +58,14 @@ public class Vector {
 
 	public void setX(float x) {
 		this.x = x;
-		computeNorm();
+		isNormCal = false;
 	}
 
 	public void setY(float y) {
 		this.y = y;
-		computeNorm();
+		isNormCal = false;
+	}
+	public String toString() {
+		return "Vecteur "+x+";"+y;
 	}
 }
